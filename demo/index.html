@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <meta name="author" content="" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+        <style>
+            html,
+            body {
+                font-family: 'Roboto', sans-serif;
+                background: linear-gradient(45deg, #076324, #009830);
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                color: #fff;
+            }
+
+            .card-area {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+
+                padding: 4rem;
+            }
+
+            .centerer {
+                width: 50%;
+                height: 60%;
+                display: flex;
+                flex-direction: column;
+
+                margin: 0 auto;
+                padding: 5% 0 0;
+                font-size: 2rem;
+                text-align: center;
+            }
+
+            .horiz-row {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .toggles {
+                background: #fafafa;
+                border-radius: 4px;
+                color: #464646;
+                padding: 1rem 2rem;
+                text-align: center;
+            }
+
+            label {
+                padding-right: 1rem;
+            }
+
+            select {
+                font-size: 1.6rem;
+            }
+
+            .toggles div {
+                margin-bottom: 1rem;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            #highlight-js-container {
+                font-size: 1.6rem;
+                text-align: left;
+            }
+        </style>
+
+        <style id="card-style">
+            playing-card {
+                --card-size: 5rem;
+                background: linear-gradient(#e66465, #9198e5);
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="centerer">
+            <h2>Vanilla Playing Card</h2>
+
+            <div class="horiz-row">
+                <div class="card-area">
+                    <playing-card rank="10" suit="D" flippable></playing-card>
+                </div>
+
+                <div class="toggles">
+                    <p>Try it out!</p>
+                    <div>
+                        <label>Card style</label>
+                        <select id="card-style-select">
+                            <option value="flippable">Flippable</option>
+                            <option value="peekable">Peekable</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Card rank</label>
+                        <select id="card-rank-select">
+                            <option value="A">A</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="J">J</option>
+                            <option value="Q">Q</option>
+                            <option value="K">K</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Card suit</label>
+                        <select id="card-suit-select">
+                            <option value="D">Diamonds</option>
+                            <option value="H">Hearts</option>
+                            <option value="S">Spades</option>
+                            <option value="C">Clubs</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Card size</label>
+                        <select id="card-size-select">
+                            <option value="2rem">2rem</option>
+                            <option value="3rem">3rem</option>
+                            <option value="4rem">4rem</option>
+                            <option value="5rem" selected>5rem</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Card background</label>
+                        <input id="card-background-input" type="text" />
+                    </div>
+                </div>
+            </div>
+            <highlight-js id="highlight-js-container" lang="html" theme="gruvbox-dark"> </highlight-js>
+        </div>
+
+        <script>
+            const styleSelect = document.querySelector('#card-style-select');
+            const rankSelect = document.querySelector('#card-rank-select');
+            const suitSelect = document.querySelector('#card-suit-select');
+            const sizeSelect = document.querySelector('#card-size-select');
+            const cardStyles = document.querySelector('#card-style');
+            const cardBackgroundInput = document.querySelector('#card-background-input');
+            const card = document.querySelector('playing-card');
+
+            const cardArea = document.querySelector('.card-area');
+            const highlightContainer = document.querySelector('#highlight-js-container');
+
+            let cardSize = '5rem';
+            let cardBackground = 'linear-gradient(#e66465, #9198e5)';
+
+            cardBackgroundInput.value = cardBackground;
+
+            const updateContainer = () => {
+                let code = cardArea.innerHTML.trim();
+                // These aren't really in the dom
+                code = code.replace('style=""', '');
+                highlightContainer.innerHTML = `
+<style>
+    playing-card {
+        --card-size: ${cardSize};
+        background: ${cardBackground};
+    }
+</style>
+
+${cardArea.innerHTML.trim()}`;
+
+                if (highlightContainer.connectedCallback) {
+                    highlightContainer.connectedCallback();
+                }
+                // This is just because the hljs doesn't like boolean attributes
+                const hljsRoot = document.querySelector('highlight-js').shadowRoot;
+                hljsRoot.querySelectorAll('.hljs-string').forEach((hlString) => {
+                    if (hlString.innerText.length < 3) {
+                        hlString.previousSibling.remove();
+                        hlString.remove();
+                    }
+                });
+            };
+
+            card.addEventListener('click', () => {
+                window.requestAnimationFrame(() => {
+                    updateContainer();
+                });
+            });
+
+            styleSelect.addEventListener('change', (e) => {
+                const style = e.target.options[e.target.selectedIndex].value;
+                switch (style) {
+                    case 'flippable':
+                        card.removeAttribute('peekable');
+                        card.setAttribute('flippable', '');
+                        break;
+
+                    case 'peekable':
+                        card.removeAttribute('flippable');
+                        card.setAttribute('peekable', '');
+                        break;
+                }
+                updateContainer();
+            });
+            rankSelect.addEventListener('change', (e) => {
+                const rank = e.target.options[e.target.selectedIndex].value;
+                card.setAttribute('rank', rank);
+                updateContainer();
+            });
+            suitSelect.addEventListener('change', (e) => {
+                const suit = e.target.options[e.target.selectedIndex].value;
+                card.setAttribute('suit', suit);
+                updateContainer();
+            });
+            sizeSelect.addEventListener('change', (e) => {
+                const size = e.target.options[e.target.selectedIndex].value;
+                cardStyles.innerHTML = cardStyles.innerHTML.replace(cardSize, size);
+                cardSize = size;
+                updateContainer();
+            });
+
+            cardBackgroundInput.addEventListener('blur', (e) => {
+                const newBackground = e.target.value;
+                cardStyles.innerHTML = cardStyles.innerHTML.replace(cardBackground, newBackground);
+                cardBackground = newBackground;
+                console.log(newBackground);
+            });
+
+            setTimeout(() => {
+                updateContainer();
+            }, 500);
+        </script>
+
+        <script type="module" src="../src/index.js"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/highlight-js-wc@1.1.3/highlight-js-wc.min.js"></script>
+    </body>
+</html>
