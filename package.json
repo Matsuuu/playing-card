@@ -1,13 +1,13 @@
 {
   "name": "playing-card",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A playing card Web Component for easy use.",
+  "main": "src/index.js",
+  "files": ["src/*"],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "wds --node-resolve --app-index demo/index.html --watch --open"
   },
-  "author": "",
+  "author": "Matsuuu",
   "license": "ISC",
   "devDependencies": {
     "@web/dev-server": "0.0.13"
