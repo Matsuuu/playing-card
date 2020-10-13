@@ -8,7 +8,7 @@ _Vanilla Playing Card_ is a easy way to impleent playing cards on web pages.
 
 ## Demo
 
-[Link to demo]()
+[Link to demo](https://matsuuu.github.io/playing-card/)
 
 ## Install
 
