@@ -23,28 +23,27 @@ class PlayingCard extends HTMLElement {
     }
 
     _addFlippableListeners() {
-        this.addEventListener('click', this._flip);
+        this.addEventListener('click', this.flip);
         this.cardStyleEventListenerRemover = () => {
-            this.removeEventListener('click', this._flip);
-            console.log('asd', this);
+            this.removeEventListener('click', this.flip);
         };
     }
 
-    _flip() {
+    flip() {
         this.setHidden(!this.hasAttribute('hidden'));
     }
 
-    _addPeekableListeners() {
-        this.setHidden(true);
-        this.addEventListener('mousedown', this._handlePeek);
-        this.cardStyleEventListenerRemover = () => this.removeEventListener('mousedown', this._handlePeek);
-    }
-
-    _handlePeek(e) {
+    peek(e) {
         this.mouseDragStart = e.y;
         this.mouseUpEventRef = this._handleDragEnd.bind(this); // so that it can be removed later
         this.addEventListener('mousemove', this._handlePeekableDrag);
         document.addEventListener('mouseup', this.mouseUpEventRef);
+    }
+
+    _addPeekableListeners() {
+        this.setHidden(true);
+        this.addEventListener('mousedown', this.peek);
+        this.cardStyleEventListenerRemover = () => this.removeEventListener('mousedown', this.peek);
     }
 
     _handleDragEnd() {

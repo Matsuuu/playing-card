@@ -1,9 +1,11 @@
 {
   "name": "playing-card",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A playing card Web Component for easy use.",
   "main": "src/index.js",
-  "files": ["src/*"],
+  "files": [
+    "src/*"
+  ],
   "scripts": {
     "start": "wds --node-resolve --app-index demo/index.html --watch --open"
   },

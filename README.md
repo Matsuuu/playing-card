@@ -41,6 +41,13 @@ npm install playing-card --save
 | Rank  | String | `A`, `2-10`, `J`, `Q` or `K` | Determines the rank of the playing card                                                               |
 | Suit  | String | `D`, `H`, `C` or `S`         | Determines the suit of the playing card. Characters are short from Diamonds, Hearts, Clubs and Spades |
 
+## API
+
+| Name   | Description                                                                                                              |
+| ------ | ------------------------------------------------------------------------------------------------------------------------ |
+| flip() | Flip the card                                                                                                            |
+| peek() | Function called when a peekable card receives a mousedown -event. Use this is if you need to trigger the event virtually |
+
 ## Styling
 
 #### Size
